@@ -151,7 +151,7 @@ public class Login extends javax.swing.JFrame {
     String password = new String(passwordChars);
 
     // Kết nối đến MongoDB Atlas
-    MongoClient mongoClient = MongoClients.create("mongodb+srv://phucpro2104:phuc123@cluster0.7834cva.mongodb.net/test");
+    MongoClient mongoClient = MongoClients.create("mongodb+srv://phucpro2104:Z4RPFJCTKtTwabKo@cluster0.7834cva.mongodb.net/123456789");
 
     // Chọn cơ sở dữ liệu
     MongoDatabase database = mongoClient.getDatabase("restaurant");

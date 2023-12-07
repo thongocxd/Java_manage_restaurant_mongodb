@@ -7,6 +7,7 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.UpdateOptions;
 import javax.swing.SwingUtilities;
 import javax.swing.ImageIcon;
 import org.bson.Document;
@@ -15,6 +16,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.Color;
+import javax.swing.JOptionPane;
+import java.awt.FlowLayout;
 
 /**
  *
@@ -55,10 +59,6 @@ private javax.swing.JPanel tablePanel;
         jButton4 = new javax.swing.JButton();
         lbTitle = new javax.swing.JLabel();
         canvas1 = new java.awt.Canvas();
-        jPanel3 = new javax.swing.JPanel();
-        lbValue = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -133,35 +133,15 @@ private javax.swing.JPanel tablePanel;
                 .addContainerGap())
         );
 
-        lbValue.setForeground(new java.awt.Color(108, 91, 123));
-        lbValue.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbValue.setText("Value");
-        jPanel3.add(lbValue);
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel1.setText("Tittle");
-        jPanel3.add(jLabel1);
-
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/caiban/images.jpg"))); // NOI18N
-        jLabel3.setText("jLabel3");
-        jLabel3.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
-        jPanel3.add(jLabel3);
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(canvas1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(45, 45, 45))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(642, Short.MAX_VALUE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 3942, Short.MAX_VALUE)
+                .addComponent(canvas1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(45, 45, 45))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -170,11 +150,9 @@ private javax.swing.JPanel tablePanel;
                 .addComponent(canvas1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(262, 262, 262))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(81, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(232, Short.MAX_VALUE))
+                .addContainerGap(48, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(199, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -191,7 +169,7 @@ private javax.swing.JPanel tablePanel;
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(72, 72, 72))
         );
 
         pack();
@@ -210,62 +188,163 @@ private javax.swing.JPanel tablePanel;
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        // TODO add your handling code here:    createTables();
+        createTables();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        createTables();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    
-private void createTables() {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    MongoClient mongoClient = MongoClients.create("mongodb+srv://phucpro2104:phuc123@cluster0.7834cva.mongodb.net/");
-                    MongoDatabase database = mongoClient.getDatabase("restaurant");
-                    MongoCollection<Document> collection = database.getCollection("table");
+public void createTables() {
+    SwingUtilities.invokeLater(new Runnable() {
+        public void run() {
+            try {
+                MongoClient mongoClient = MongoClients.create("mongodb+srv://phucpro2104:Z4RPFJCTKtTwabKo@cluster0.7834cva.mongodb.net/123456789");
+                MongoDatabase database = mongoClient.getDatabase("restaurant");
+                MongoCollection<Document> collection = database.getCollection("table");
 
-                    tablePanel = new JPanel(new GridLayout(2, 5)); // Adjust grid layout as needed
+                tablePanel = new JPanel(new GridLayout(3, 4)); // Adjust grid layout as needed
+                tablePanel.setBounds(150, 50, 900, 500);
 
-                    for (Document document : collection.find()) {
-                        Integer tableNumber = document.getInteger("table_number");
-                        String tableName = document.getString("table_name");
+                for (Document document : collection.find()) {
+                    Integer tableNumber = document.getInteger("table_number");
+                    String tableName = document.getString("table_name");
+                    String trangThai = document.getString("trangthai");
 
-                        // Debugging print
-                        System.out.println("Table Number: " + tableNumber + ", Table Name: " + tableName);
+                    // Debugging print
+                    System.out.println("Table Number: " + tableNumber + ", Table Name: " + tableName);
 
-                        JPanel tablePanelItem = new JPanel(new BorderLayout());
-                        JButton tableButton = new JButton("Table " + tableNumber + ": " + tableName);
+                    JLabel status = new JLabel(tableName + " - Tình trạng: " + trangThai);
+                    JPanel tablePanelItem = new JPanel(new BorderLayout());
 
-                        // Optional: Add action listener to tableButton here
+                    // Ensure the imagePath is correctly retrieved and valid
+                    String imagePath = document.getString("imagePath");
+                    ImageIcon imageIcon = new ImageIcon(imagePath);
+                    JLabel imageLabel = new JLabel(imageIcon);
+                    imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/caiban/images.jpg")));
+                    
+                    
+                    // Create a panel for buttons and add it to the SOUTH position
+                    JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-                        JLabel imageLabel = new JLabel();
-                        
-                        // Ensure the imagePath is correctly retrieved and valid
-//                        String imagePath = document.getString("imagePath");
-//                        ImageIcon imageIcon = new ImageIcon(imagePath);
-//                        imageLabel.setIcon(imageIcon);
+                    JButton actionButton = new JButton();
+                    buttonPanel.add(actionButton);
+                    tablePanelItem.add(buttonPanel, BorderLayout.SOUTH);
 
-                        tablePanelItem.add(tableButton, BorderLayout.NORTH);
-                        tablePanelItem.add(imageLabel, BorderLayout.CENTER);
+                    // Create buttons based on the table status
+                    if ("Ban Trong".equals(trangThai)) {
+                        actionButton.setText("Đặt Bàn");
+                        actionButton.addActionListener(e -> {
+                            // Display a confirmation dialog
+                            int result = JOptionPane.showConfirmDialog(null, "Xác nhận đặt bàn cho bàn số " + tableNumber + "?", "Xác Nhận", JOptionPane.YES_NO_OPTION);
 
-                        tablePanel.add(tablePanelItem);
+                            if (result == JOptionPane.YES_OPTION) {
+                                // Update the table status in the database (assuming you have a method to update the database)
+                                updateTableStatus(tableNumber, "Ban Da Dat");
+
+                                // Change the button text to "Gọi Món"
+                                actionButton.setText("Gọi Món");
+
+                                // Add "Hủy Bàn" button
+                                JButton cancelButton = new JButton("Hủy Bàn");
+                                cancelButton.addActionListener(cancelEvent -> {
+                                    // Add code to handle the action when the "Hủy Bàn" button is clicked
+                                    System.out.println("Hủy Bàn clicked for table number: " + tableNumber);
+                                });
+
+                                // Add "Gọi Món" button
+                                JButton orderButton = new JButton("Gọi Món");
+                                orderButton.addActionListener(orderEvent -> {
+                                    // Add code to handle the action when the "Gọi Món" button is clicked
+                                    System.out.println("Gọi Món clicked for table number: " + tableNumber);
+                                });
+
+                                // Add buttons to the buttonPanel
+                                buttonPanel.removeAll();
+                                buttonPanel.add(orderButton);
+                                buttonPanel.add(cancelButton);
+
+                                // Repaint the panel
+                                tablePanelItem.revalidate();
+                                tablePanelItem.repaint();
+                            }
+                        });
+                    } else if ("Ban Da Dat".equals(trangThai)) {
+                        actionButton.setText("Gọi Món");
+                        actionButton.addActionListener(orderEvent -> {
+                            // Add code to handle the action when the "Gọi Món" button is clicked
+                            System.out.println("Gọi Món clicked for table number: " + tableNumber);
+                        });
+
+                        // Add "Hủy Bàn" button
+                        JButton cancelButton = new JButton("Hủy Bàn");
+                        cancelButton.addActionListener(cancelEvent -> {
+                            // Add code to handle the action when the "Hủy Bàn" button is clicked
+                            System.out.println("Hủy Bàn clicked for table number: " + tableNumber);
+                        });
+
+                        // Add buttons to the buttonPanel
+                        buttonPanel.removeAll();
+                        buttonPanel.add(actionButton);
+                        buttonPanel.add(cancelButton);
+
+                        // Repaint the panel
+                        tablePanelItem.revalidate();
+                        tablePanelItem.repaint();
                     }
 
-                    jPanel1.add(tablePanel);
-                    jPanel1.revalidate();
-                    jPanel1.repaint();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    // Set the foreground color to make the text visible on the background
+                    status.setForeground(Color.WHITE);
+
+                    // Set other properties, e.g., opaque to make the background color visible
+                    status.setOpaque(true);
+
+                    tablePanelItem.add(status, BorderLayout.NORTH);
+                    tablePanelItem.add(imageLabel, BorderLayout.CENTER);
+
+                    tablePanel.add(tablePanelItem);
                 }
+
+                jPanel1.add(tablePanel);
+                jPanel1.revalidate();
+                jPanel1.repaint();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        });
+        }
+    });
+}
+
+
+    
+    private void updateTableStatus(int tableNumber, String newStatus) {
+        try {
+            // Connect to MongoDB
+            MongoClient mongoClient = MongoClients.create("mongodb+srv://phucpro2104:phuc123@cluster0.7834cva.mongodb.net/");
+            MongoDatabase database = mongoClient.getDatabase("restaurant");
+            MongoCollection<Document> collection = database.getCollection("table");
+
+            // Prepare the filter based on the table number
+            Document filter = new Document("table_number", tableNumber);
+
+            // Prepare the update with the new status
+            Document update = new Document("$set", new Document("trangthai", newStatus));
+
+            // Set the update options
+            UpdateOptions options = new UpdateOptions().upsert(false);
+
+            // Update the document in the collection
+            collection.updateOne(filter, update, options);
+
+            // Print a message to the console for debugging
+            System.out.println("Table status updated successfully.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error updating table status. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
-
-
-    
-    
     
      private void tableButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // Handle table button click event if needed
@@ -306,11 +385,10 @@ private void createTables() {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new DatBan().setVisible(true);
-                
-                
             }
         });
     }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.awt.Canvas canvas1;
@@ -318,12 +396,8 @@ private void createTables() {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel lbTitle;
-    private javax.swing.JLabel lbValue;
     // End of variables declaration//GEN-END:variables
 }
