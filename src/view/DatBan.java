@@ -20,6 +20,7 @@ import java.awt.Color;
 import javax.swing.JOptionPane;
 import java.awt.FlowLayout;
 
+
 /**
  *
  * @author kevin
@@ -201,7 +202,7 @@ public void createTables() {
     SwingUtilities.invokeLater(new Runnable() {
         public void run() {
             try {
-                MongoClient mongoClient = MongoClients.create("mongodb+srv://phucpro2104:Z4RPFJCTKtTwabKo@cluster0.7834cva.mongodb.net/123456789");
+                MongoClient mongoClient = MongoClients.create("mongodb+srv://phucpro2104:phuc123@cluster0.7834cva.mongodb.net/");
                 MongoDatabase database = mongoClient.getDatabase("restaurant");
                 MongoCollection<Document> collection = database.getCollection("table");
 
@@ -250,8 +251,14 @@ public void createTables() {
                                 // Add "Hủy Bàn" button
                                 JButton cancelButton = new JButton("Hủy Bàn");
                                 cancelButton.addActionListener(cancelEvent -> {
-                                    // Add code to handle the action when the "Hủy Bàn" button is clicked
-                                    System.out.println("Hủy Bàn clicked for table number: " + tableNumber);
+                                     updateTableStatus(tableNumber, "Ban Trong");
+                                    actionButton.setText("Đặt Bàn");
+                                     // Remove "Gọi Món" and "Hủy Bàn" buttons
+                                    buttonPanel.removeAll();
+                                    buttonPanel.add(actionButton);
+                                    // Repaint the panel
+                                    tablePanelItem.revalidate();
+                                    tablePanelItem.repaint();
                                 });
 
                                 // Add "Gọi Món" button
@@ -261,7 +268,7 @@ public void createTables() {
                                     System.out.println("Gọi Món clicked for table number: " + tableNumber);
                                 });
 
-                                // Add buttons to the buttonPanel
+                                // Add buttons to the buttonPanel   
                                 buttonPanel.removeAll();
                                 buttonPanel.add(orderButton);
                                 buttonPanel.add(cancelButton);
@@ -272,28 +279,82 @@ public void createTables() {
                             }
                         });
                     } else if ("Ban Da Dat".equals(trangThai)) {
-                        actionButton.setText("Gọi Món");
-                        actionButton.addActionListener(orderEvent -> {
-                            // Add code to handle the action when the "Gọi Món" button is clicked
-                            System.out.println("Gọi Món clicked for table number: " + tableNumber);
-                        });
+    actionButton.setText("Gọi Món");
+    actionButton.addActionListener(orderEvent -> {
+        // Add code to handle the action when the "Gọi Món" button is clicked
+        System.out.println("Gọi Món clicked for table number: " + tableNumber);
+    });
 
-                        // Add "Hủy Bàn" button
-                        JButton cancelButton = new JButton("Hủy Bàn");
-                        cancelButton.addActionListener(cancelEvent -> {
-                            // Add code to handle the action when the "Hủy Bàn" button is clicked
-                            System.out.println("Hủy Bàn clicked for table number: " + tableNumber);
-                        });
+    // Add "Hủy Bàn" button
+    JButton cancelButton = new JButton("Hủy Bàn");
+    cancelButton.addActionListener(cancelEvent -> {
+        // Add code to handle the action when the "Hủy Bàn" button is clicked
+        updateTableStatus(tableNumber, "Ban Trong");
+        actionButton.setText("Đặt Bàn");
 
-                        // Add buttons to the buttonPanel
-                        buttonPanel.removeAll();
-                        buttonPanel.add(actionButton);
-                        buttonPanel.add(cancelButton);
+        // Remove "Gọi Món" and "Hủy Bàn" buttons
+        buttonPanel.removeAll();
 
-                        // Repaint the panel
-                        tablePanelItem.revalidate();
-                        tablePanelItem.repaint();
-                    }
+        // Add "Đặt Bàn" button
+        actionButton.addActionListener(e -> {
+            // Display a confirmation dialog
+            int result = JOptionPane.showConfirmDialog(null, "Xác nhận đặt bàn cho bàn số " + tableNumber + "?", "Xác Nhận", JOptionPane.YES_NO_OPTION);
+
+            if (result == JOptionPane.YES_OPTION) {
+                // Update the table status in the database (assuming you have a method to update the database)
+                updateTableStatus(tableNumber, "Ban Da Dat");
+
+                // Change the button text to "Gọi Món"
+                actionButton.setText("Gọi Món");
+
+                // Add "Hủy Bàn" button
+                JButton newCancelButton = new JButton("Hủy Bàn");
+                newCancelButton.addActionListener(newCancelEvent -> {
+                    updateTableStatus(tableNumber, "Ban Trong");
+                    actionButton.setText("Đặt Bàn");
+                    // Remove "Gọi Món" and "Hủy Bàn" buttons
+                    buttonPanel.removeAll();
+                    // Add "Đặt Bàn" button
+                    buttonPanel.add(actionButton);
+                    // Repaint the panel
+                    tablePanelItem.revalidate();
+                    tablePanelItem.repaint();
+                });
+
+                // Add "Gọi Món" button
+                JButton newOrderButton = new JButton("Gọi Món");
+                newOrderButton.addActionListener(newOrderEvent -> {
+                    // Add code to handle the action when the "Gọi Món" button is clicked
+                    System.out.println("Gọi Món clicked for table number: " + tableNumber);
+                });
+
+                // Add buttons to the buttonPanel   
+                buttonPanel.removeAll();
+                buttonPanel.add(newOrderButton);
+                buttonPanel.add(newCancelButton);
+
+                // Repaint the panel
+                tablePanelItem.revalidate();
+                tablePanelItem.repaint();
+            }
+        });
+
+        // Add the actionButton to the buttonPanel
+        buttonPanel.add(actionButton);
+
+        // Repaint the panel    
+        tablePanelItem.revalidate();
+        tablePanelItem.repaint();
+    });
+
+    // Add buttons to the buttonPanel
+    buttonPanel.add(actionButton);
+    buttonPanel.add(cancelButton);
+
+    // Repaint the panel
+    tablePanelItem.revalidate();
+    tablePanelItem.repaint();
+}
 
                     // Set the foreground color to make the text visible on the background
                     status.setForeground(Color.WHITE);
@@ -353,7 +414,7 @@ public void createTables() {
         JButton clickedButton = (JButton) evt.getSource();
         System.out.println("Table clicked: " + clickedButton.getText());
     }
-    
+  
     /**
      * @param args the command line arguments
      */

@@ -21,7 +21,7 @@ public class Signup extends javax.swing.JFrame {
     
     public Signup() {
         initComponents();
-        mongoClient = MongoClients.create("mongodb+srv://phucpro2104:Z4RPFJCTKtTwabKo@cluster0.7834cva.mongodb.net/123456789");
+        mongoClient = MongoClients.create("mongodb+srv://phucpro2104:phuc123@cluster0.7834cva.mongodb.net/");
         // Chọn database
         database = mongoClient.getDatabase("restaurant");
     }
